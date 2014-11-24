@@ -83,24 +83,79 @@ public class FileOperation {
 	      }
 	}
 	
-	public void read(String file) {
-		String s = null;
-		StringBuffer sb = new StringBuffer();
-		File f = new File(file);
-		if (f.exists()) {
+	public void write(String path, String content) {
+	      String oldStr = new String();
+	      String newStr = new String();
+	      try {
+	    	  File f = new File(path);
+	    	  if (f.exists()) {
+	    		  //System.out.println("文件存在");
+	    	  } else {
+	    		  //System.out.println("文件不存在，正在創建...");
+	    		  if (f.createNewFile()) {
+	    			  //System.out.println("文件創建成功！");
+	    		  } else {
+	    			  //System.out.println("文件創建失敗！");
+	    		  }
+	    	  }
+	    	  BufferedReader input = new BufferedReader(new FileReader(f));
+	    	  while ((oldStr = input.readLine()) != null) {
+	    		  newStr += oldStr;
+	    	  }
+	    	  //System.out.println("文件內容：" + newStr);
+	    	  input.close();
+	    	  newStr += content;
+
+	    	  BufferedWriter output = new BufferedWriter(new FileWriter(f));
+	    	  output.write(newStr);
+	    	  output.close();
+	      } catch (Exception e) {
+	    	  e.printStackTrace();
+	      }
+	}
+	
+	public void read(String filename) {
+		String str = null;
+		StringBuffer buffer = new StringBuffer();
+		File file = new File(filename);
+		if (file.exists()) {
 			System.out.println("文件存在！");
 			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-				while ((s = br.readLine()) != null) {
-					sb.append(s);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+				while ((str = reader.readLine()) != null) {
+					buffer.append(str);
 				}
-				System.out.println(sb);
-				br.close();
+				System.out.println(buffer);
+				reader.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}else{
 			System.out.println("文件不存在！");
 		}
+	}
+	
+	public String getFileContent(String path) {
+		String str = null;
+		String returnStr = null;
+		StringBuffer buffer = new StringBuffer();
+		File file = new File(path);
+		if (file.exists()) {
+			//System.out.println("文件存在！");
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+				while ((str = reader.readLine()) != null) {
+					buffer.append(str);
+				}
+				//System.out.println(buffer);
+				returnStr = buffer.toString();
+				reader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			System.out.println("文件不存在！");
+		}
+		return returnStr;
 	}
 }
