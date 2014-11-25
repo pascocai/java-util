@@ -158,4 +158,17 @@ public class FileOperation {
 		}
 		return returnStr;
 	}
+	
+	public boolean createFolder(String path) {
+		File file =new File(path);
+		if(!file.exists()&&!file.isDirectory()) {     // 不存在
+		    file.mkdir();
+		    if(file.isDirectory())
+		    	return true;
+		} else {	// 存在
+			if(file.isDirectory())	// 是目錄
+				return true;
+		}
+		return false;
+	}
 }
